@@ -1,0 +1,150 @@
+* {
+	box-sizing: border-box;
+}
+
+html {
+	font-family: Ubuntu, sans-serif;
+	background: hsl(120, 85%, 80%) url('images/background.png');
+}
+
+main {
+	max-width: 600px;
+	margin: 20px auto;
+	width: 65%;
+	padding: 10px 20px;
+	
+	background: hsl(30, 45%, 70%) url('images/paper.png');
+	box-shadow: 3px 3px 8px;
+}
+
+footer {
+	font-weight: bold;
+	font-variant: small-caps;
+}
+
+h1 {
+	text-align: center;
+	font-variant: small-caps;
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+ul.lists, ul.items {
+	list-style: none inside;
+	padding-left: 0;
+}
+
+ul.lists li, ul.items li, form.singleline {
+	margin-top: 6px;
+	position: relative;
+	width: 100%;
+	overflow: hidden;
+
+	box-shadow: 1px 1px 2px black;
+	background: white;
+}
+
+li .content {
+	padding: 6px;
+	width: 100%;
+	margin-right: -77px;
+	font-size: inherit;
+	float: left;
+}
+
+.nofloat {
+	float: none !important;
+}
+
+li .content .inner {
+	white-space: nowrap;
+	margin-right: 77px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+ul.lists li:hover, ul.items li:hover {
+	background: hsl(0, 0%, 80%);
+}
+
+form.singleline:hover {
+	background: white;
+}
+
+form.inline {
+	height: inherit;
+	text-align: left;
+	display: block;
+}
+
+form.singleline input {
+	margin: 0;
+	padding: 6px;
+	width: 100%;
+	float: left;
+
+	font-size: inherit;
+	background: inherit;
+	border: none;
+}
+
+form.inline button, form.singleline button, .button {
+	border: none;
+	padding: 5px 6px;
+	
+	font-size: inherit;
+}
+
+.button {
+	box-shadow: 1px 1px 2px black;
+}
+
+.green {
+	background: hsl(120, 85%, 70%) url('images/green.png') !important;
+}
+
+.red {
+	background: hsl(0, 85%, 70%) url('images/red.png') !important;
+}
+
+.blue {
+	background: hsl(220, 85%, 70%) url('images/blue.png') !important;
+}
+
+.orange {
+	background: hsl(25, 85%, 70%) url('images/orange.png') !important;
+}
+
+.purple {
+	background: hsl(280, 85%, 70%) url('images/purple.png') !important;
+}
+
+.yellow {
+	background: hsl(60, 85%, 70%) url('images/yellow.png') !important;
+}
+
+.white {
+	background: white url('images/white.png') !important;
+}
+
+.note {
+	display: block;
+	margin: 20px auto;
+	width: auto;
+	padding: 12px;
+	text-align: center;
+
+	box-shadow: 1px 1px 2px black;
+}
+
+span.clear {
+	width: 0;
+	clear: both;
+}
+
+.indent {
+	margin-left: 31px;
+}
