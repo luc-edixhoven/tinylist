@@ -102,11 +102,11 @@ form.inline button, form.singleline button, .button {
 	box-shadow: 1px 1px 2px black;
 }
 
-.green {
+.green, .success {
 	background: hsl(120, 85%, 70%) url('images/green.png') !important;
 }
 
-.red {
+.red, .warning {
 	background: hsl(0, 85%, 70%) url('images/red.png') !important;
 }
 
