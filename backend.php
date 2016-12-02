@@ -5,8 +5,6 @@ if (!defined("TinyList")) {
 	exit;
 }
 
-const MAX_LISTS = 1000;
-
 const LISTDIR = "lists/";
 const ITEMDELIM_BEGIN = "BeginItems";
 const ITEMDELIM_END = "EndItems";
@@ -61,12 +59,6 @@ function listOfLists() {
 
 // Creates a new list.
 function addList($listname, &$body) {
-	$filecount = count(scandir(LISTDIR));
-	if ($filecount >= MAX_LISTS) {
-		$body .= sprintf('<p class="note warning">Too many lists already exist. Please delete some before adding more.</p>');
-		return false;
-	}
-
 	$filename = flattenListName($listname);
 	if (!isListName($filename . '.list')) {
 		$body .= sprintf('<p class="note success">Invalid list name: %s.</p>', $listname);
