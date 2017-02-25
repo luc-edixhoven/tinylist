@@ -47,9 +47,9 @@ function listOfLists() {
 
 	// Add a form for adding a new list.
 	$body .= '<form class="singleline white" method="post" action="' . htmlspecialchars($_SERVER['PHP_SELF']) . '" role="form">';
-	$body .= '<input class="" type="text" name="name" placeholder="New list name" style="margin-right: -76px;" required />';
+	$body .= '<div class="text"><input class="" type="text" name="name" placeholder="New list name" required /></div>';
 	$body .= '<input type="hidden" name="new-list" />';
-	$body .= '<button type="submit" class="blue">New list</button>';
+	$body .= '<button type="submit" class="blue">New&nbsp;list</button>';
 	$body .= '</form>';
 
 	$body .= '</ul>';
@@ -175,7 +175,7 @@ class TinyList {
 
 						$this->items[$sublist]->init();
 					}
-					
+
 					// Add the item to the sublist.
 					$this->items[$sublist]->addItem(substr($name, $separator + 1), $linenumber);
 				}
@@ -240,7 +240,7 @@ class TinyList {
 		$body .= '<ul class="items">';
 
 		foreach($this->items as $item) {
-			$body .= '<li class="white">';
+			$body .= '<li>';
 			$body .= $item->printItem();
 
 			$body = str_replace("{{LISTNAME}}", flattenListName($this->name), $body);
@@ -250,18 +250,18 @@ class TinyList {
 
 		// Add a form for adding a new item.
 		$body .= sprintf('<form class="singleline white" method="post" action="%s?list=%s" role="form">', htmlspecialchars($_SERVER['PHP_SELF']), flattenListName($this->name));
-		$body .= '<input type="text" name="name" placeholder="New item name" style="margin-right: -88px;" required />';
+		$body .= '<div class="text"><input type="text" name="name" placeholder="New item name" /></div>';
 		$body .= '<input type="hidden" name="new-item" />';
-		$body .= '<button type="submit" class="blue">New item</button>';
+		$body .= '<button type="submit" class="blue">New&nbsp;item</button>';
 		$body .= '</form>';
 
 		// Add a form for removing the list.
 		$body .= '<br class="empty" />';
 		$body .= sprintf('<form class="singleline white" method="post" action="%s" role="form">', htmlspecialchars($_SERVER['PHP_SELF']));
-		$body .= '<input type="text" name="confirm" placeholder="Type \'delete\'" style="margin-right: -189px;" required />';
+		$body .= '<div class="text"><input type="text" name="confirm" placeholder="Type \'delete\'" /></div>';
 		$body .= sprintf('<input type="hidden" name="name" value="%s" />', flattenListName($this->name));
 		$body .= '<input type="hidden" name="remove-list" />';
-		$body .= '<button type="submit" class="red">Remove the list entirely</button>';
+		$body .= '<button type="submit" class="red">Remove&nbsp;entire&nbsp;list</button>';
 		$body .= '</form>';
 
 		$body .= '</ul>';
@@ -274,6 +274,11 @@ class TinyList {
 	// Adds a new item to the list.
 	// TODO: Check if this function is airtight.
 	public function addItem($name) {
+		$name = trim($name);
+		if ($name == '') {
+			return;
+		}
+
 		$filecontent = file_get_contents($this->filename);
 		$lines = explode("\n", $filecontent);
 
@@ -294,6 +299,11 @@ class TinyList {
 	// Alters an item in the list.
 	// TODO: Check if this function is airtight.
 	public function alterItem($linenumber, $newname) {
+		$newname = trim($newname);
+		if ($newname == '') {
+			return;
+		}
+
 		$filecontent = file_get_contents($this->filename);
 		$lines = explode("\n", $filecontent);
 
@@ -353,16 +363,18 @@ class ListItem {
 
 	// Returns a formatted string representing the item.
 	public function printItem() {
-		$body = '';
+		$body = '<div class="item">';
 
-		$body .= sprintf('<div class="content" title="%s"><div class="inner" id="listitem-%s">%s</div></div>', $this->name, $this->linenumber, $this->name);
+		$body .= sprintf('<div class="content" title="%s" id="listitem-%s">%s</div>', $this->name, $this->linenumber, $this->name);
 
 		// Add a form for removing this item.
-		$body .= sprintf('<form class="inline" method="post" action="%s?list=%s" role="form">', htmlspecialchars($_SERVER['PHP_SELF']), "{{LISTNAME}}");
+		$body .= sprintf('<form class="inline onparenthover" method="post" action="%s?list=%s" role="form">', htmlspecialchars($_SERVER['PHP_SELF']), "{{LISTNAME}}");
 		$body .= sprintf('<input type="hidden" name="linenumber" value="%s" />', $this->getLinenumber());
 		$body .= '<input type="hidden" name="remove-item" />';
-		$body .= '<button type="submit" class="red">Remove</button>';
+		$body .= '<button type="submit" class="red"><img alt="X" src="assets/icons/cross.svg" /></button>';
 		$body .= '</form>';
+
+		$body .= '</div>';
 
 		return $body;
 	}
@@ -397,7 +409,7 @@ class SubList extends ListItem {
 	public function printItem() {
 		$body = '';
 
-		$body .= sprintf('<div class="content nofloat %s" title="%s"><div class="inner" id="sublist-%s">%s</div></div>', $this->colour, $this->name, flattenListName($this->name), $this->name);
+		$body .= sprintf('<div class="content %s" title="%s"><div class="inner" id="sublist-%s">%s</div></div>', $this->colour, $this->name, flattenListName($this->name), $this->name);
 
 		$body .= sprintf('<div class="indent">');
 
@@ -445,7 +457,7 @@ class SubList extends ListItem {
 			else
 				$count += 1;
 		}
-		
+
 		return $count;
 	}
 

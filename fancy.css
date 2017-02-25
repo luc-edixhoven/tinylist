@@ -1,19 +1,21 @@
 * {
 	box-sizing: border-box;
+	transition: all 0.5s ease;
 }
 
 html {
 	font-family: Ubuntu, sans-serif;
-	background: hsl(120, 85%, 80%) url('images/background.png');
+	background: hsl(120, 85%, 80%) url('assets/backgrounds/background.png');
 }
 
 main {
+	min-width: 300px;
 	max-width: 600px;
 	margin: 20px auto;
 	width: 65%;
 	padding: 10px 20px;
-	
-	background: hsl(30, 45%, 70%) url('images/paper.png');
+
+	background: hsl(30, 45%, 70%) url('assets/backgrounds/paper.png');
 	box-shadow: 3px 3px 8px;
 }
 
@@ -39,35 +41,23 @@ ul.lists, ul.items {
 
 ul.lists li, ul.items li, form.singleline {
 	margin-top: 6px;
-	position: relative;
-	width: 100%;
-	overflow: hidden;
 
 	box-shadow: 1px 1px 2px black;
 	background: white;
 }
 
+.item, form.singleline {
+	display: flex;
+	overflow: hidden;
+}
+
 li .content {
 	padding: 6px;
-	width: 100%;
-	margin-right: -77px;
+	flex: auto;
 	font-size: inherit;
-	float: left;
-}
-
-.nofloat {
-	float: none !important;
-}
-
-li .content .inner {
 	white-space: nowrap;
-	margin-right: 77px;
 	overflow: hidden;
 	text-overflow: ellipsis;
-}
-
-ul.lists li:hover, ul.items li:hover {
-	background: hsl(0, 0%, 80%);
 }
 
 form.singleline:hover {
@@ -75,16 +65,21 @@ form.singleline:hover {
 }
 
 form.inline {
-	height: inherit;
 	text-align: left;
-	display: block;
+}
+
+form.singleline > * {
+	flex: auto;
+}
+
+form.singleline button {
+	flex: 1;
 }
 
 form.singleline input {
 	margin: 0;
 	padding: 6px;
 	width: 100%;
-	float: left;
 
 	font-size: inherit;
 	background: inherit;
@@ -94,8 +89,14 @@ form.singleline input {
 form.inline button, form.singleline button, .button {
 	border: none;
 	padding: 5px 6px;
-	
+	cursor: pointer;
+
 	font-size: inherit;
+}
+
+form.inline button {
+	padding: 0;
+	height: 100%;
 }
 
 .button {
@@ -103,31 +104,31 @@ form.inline button, form.singleline button, .button {
 }
 
 .green, .success {
-	background: hsl(120, 85%, 70%) url('images/green.png') !important;
+	background: hsl(120, 85%, 70%) url('assets/backgrounds/green.png') !important;
 }
 
 .red, .warning {
-	background: hsl(0, 85%, 70%) url('images/red.png') !important;
+	background: hsl(0, 85%, 70%) url('assets/backgrounds/red.png') !important;
 }
 
 .blue {
-	background: hsl(220, 85%, 70%) url('images/blue.png') !important;
+	background: hsl(220, 85%, 70%) url('assets/backgrounds/blue.png') !important;
 }
 
 .orange {
-	background: hsl(25, 85%, 70%) url('images/orange.png') !important;
+	background: hsl(25, 85%, 70%) url('assets/backgrounds/orange.png') !important;
 }
 
 .purple {
-	background: hsl(280, 85%, 70%) url('images/purple.png') !important;
+	background: hsl(280, 85%, 70%) url('assets/backgrounds/purple.png') !important;
 }
 
 .yellow {
-	background: hsl(60, 85%, 70%) url('images/yellow.png') !important;
+	background: hsl(60, 85%, 70%) url('assets/backgrounds/yellow.png') !important;
 }
 
-.white {
-	background: white url('images/white.png') !important;
+.white, ul.items li {
+	background: white url('assets/backgrounds/white.png') !important;
 }
 
 .note {
@@ -140,11 +141,14 @@ form.inline button, form.singleline button, .button {
 	box-shadow: 1px 1px 2px black;
 }
 
-span.clear {
-	width: 0;
-	clear: both;
+.indent {
+	margin-left: 1em;
 }
 
-.indent {
-	margin-left: 31px;
+.onparenthover {
+	width: 0;
+}
+
+*:hover > .onparenthover {
+	width: auto;
 }
