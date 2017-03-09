@@ -5,6 +5,24 @@ if (!defined("TinyList")) {
 	exit;
 }
 
+if (file_exists('localsettings.php')) {
+	include 'localsettings.php';
+}
+
+// Define flood limits if not included from the local settings file.
+if (!defined("MAX_NUM_LISTS")) {
+	define("MAX_NUM_LISTS", 100);
+}
+if (!defined("MAX_NUM_ITEMS")) {
+	define("MAX_NUM_ITEMS", 1000);
+}
+if (!defined("MAX_ITEM_LENGTH")) {
+	define("MAX_ITEM_LENGTH", 200);
+}
+if (!defined("MAX_NESTING_DEPTH")) {
+	define("MAX_NESTING_DEPTH", 5);
+}
+
 const LISTDIR = "lists/";
 const ITEMDELIM_BEGIN = "BeginItems";
 const ITEMDELIM_END = "EndItems";
@@ -66,6 +84,13 @@ function addList($listname, &$body) {
 	}
 	if (listExists($filename)) {
 		$body .= sprintf('<p class="note success">Filename %s already taken.</p>', $filename);
+		return false;
+	}
+
+	// Flood limit.
+	$listnames = scandir(LISTDIR);
+	$listnames = array_filter($listnames, "isListName");
+	if (count($listnames) >= MAX_NUM_LISTS) {
 		return false;
 	}
 
@@ -163,7 +188,7 @@ class TinyList {
 			if (strpos($lines[$linenumber], "Item ") === 0) {
 				$name = substr($lines[$linenumber], strlen("Item "));
 				// Check if sublist needed
-				if (($separator = strpos($name, SUBLISTDELIM)) !== false) {
+				if (($separator = strpos($name, SUBLISTDELIM)) !== false && MAX_NESTING_DEPTH > 0) {
 					$sublistname = substr($name, 0, $separator);
 					$sublist = $this->getSublist($sublistname);
 
@@ -279,8 +304,17 @@ class TinyList {
 			return;
 		}
 
+		if (strlen($name) > MAX_ITEM_LENGTH) {
+			$name = substr($name, 0, MAX_ITEM_LENGTH);
+		}
+
 		$filecontent = file_get_contents($this->filename);
 		$lines = explode("\n", $filecontent);
+
+		// There are more lines than items in the file, but this should suffice for now. If necessary, just up the flood limit constant a bit.
+		if (count($lines) >= MAX_NUM_ITEMS) {
+			return;
+		}
 
 		$end = array_search(ITEMDELIM_END, $lines);
 		$lines[$end + 1] = $lines[$end];
@@ -300,7 +334,7 @@ class TinyList {
 	// TODO: Check if this function is airtight.
 	public function alterItem($linenumber, $newname) {
 		$newname = trim($newname);
-		if ($newname == '') {
+		if ($newname == '' || strlen($newname) > MAX_ITEM_LENGTH) {
 			return;
 		}
 
@@ -423,10 +457,10 @@ class SubList extends ListItem {
 	}
 
 	// Adds an item to the sublist.
-	public function addItem($name, $linenumber = -2) {
+	public function addItem($name, $linenumber = -2, $nesting_depth = 1) {
 		$name = trim($name);
 		// Check if a new sublist is needed
-		if (($separator = strpos($name, SUBLISTDELIM)) !== false) {
+		if (($separator = strpos($name, SUBLISTDELIM)) !== false && $nesting_depth < MAX_NESTING_DEPTH) {
 			$sublistname = substr($name, 0, $separator);
 			$sublist = $this->getSublist($sublistname);
 
@@ -439,7 +473,7 @@ class SubList extends ListItem {
 				$this->items[$sublist]->init();
 			}
 
-			$this->items[$sublist]->addItem(substr($name, $separator + 1), $linenumber);
+			$this->items[$sublist]->addItem(substr($name, $separator + 1), $linenumber, $nesting_depth + 1);
 		}
 		else {
 			$this->items[] = new ListItem($name, $linenumber + 1);
