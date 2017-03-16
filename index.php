@@ -77,7 +77,7 @@ $body .= '</main>';
 	<?php echo $body; ?>
 
 	<footer class="note white" style="width: 65%; max-width: 600px;"><i>&#8220;Klein maar fijn!&#8221;</i><br />
-	TinyList 2015-2016</footer>
+	TinyList 2015-2017</footer>
 </body>
 
 </html>
